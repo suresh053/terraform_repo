@@ -1,0 +1,59 @@
+pwd                   # Show current directory
+ls                    # List files
+ls -l                 # Long list with permissions
+ls -a                 # Show hidden files (those starting with .)
+cd /                  # Go to root directory
+cd ~                  # Go to home directory
+cd ..                 # Go one folder up
+
+
+touch file.txt        # Create empty file
+echo "Hello Linux" > file.txt    # Write text to file
+cat file.txt          # Show contents of file
+nano file.txt         # Edit file in Nano editor
+less file.txt         # View file (scroll with space/arrow keys)
+head file.txt         # Show first 10 lines
+tail file.txt         # Show last 10 lines
+
+
+cp file.txt backup.txt          # Copy file
+mv backup.txt ~/backup.txt      # Move/rename file
+rm backup.txt                   # Delete file
+mkdir myfolder                  # Create folder
+rmdir myfolder                  # Remove empty folder
+rm -r myfolder                  # Remove folder and contents
+
+
+find . -name "*.txt"             # Find files ending in .txt
+grep "Linux" file.txt            # Search text in file
+grep -i "linux" file.txt         # Case-insensitive search
+
+
+whoami                 # Current username
+hostname               # Machine name
+uname -a               # Kernel & system info
+df -h                  # Disk usage
+free -h                # Memory usage
+top                    # Live system monitor
+htop                   # (If installed) better top
+
+ls -l                  # Show file permissions
+chmod 644 file.txt     # Change permissions (rw-r--r--)
+chmod +x script.sh     # Make file executable
+chown user:user file.txt   # Change file owner
+
+
+tar -czvf archive.tar.gz myfolder     # Compress folder
+tar -xzvf archive.tar.gz              # Extract archive
+
+
+ps aux                  # Show running processes
+kill <PID>              # Kill process by ID
+
+
+date                    # Show date & time
+cal                     # Calendar
+history                 # Show command history
+clear                   # Clear terminal screen
+
+mkdir ~/practice && cd ~/practice
