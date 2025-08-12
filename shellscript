@@ -1,92 +1,51 @@
-Beginner Practice Scripts
-Hello World
-
-bash
-Copy
-Edit
 echo "Hello DevOps"
-Loop through a list from a file
-servers.txt
 
-nginx
-Copy
-Edit
 server1
 server2
 server3
-Script:
 
-bash
-Copy
-Edit
 while read server; do
     echo "Processing $server"
 done < servers.txt
+
 Check disk usage (alert if > 80%)
 
-bash
-Copy
-Edit
+
 usage=$(df / | grep / | awk '{print $5}' | sed 's/%//')
 if [ "$usage" -gt 80 ]; then
     echo "Warning: Disk usage is ${usage}%!"
 else
     echo "Disk usage is under control."
 fi
-Intermediate DevOps Scripts
-Check if a service is running
 
-bash
-Copy
-Edit
 service="nginx"
 if systemctl is-active --quiet "$service"; then
     echo "$service is running"
 else
     echo "$service is NOT running"
 fi
-Backup a directory with timestamp
 
-bash
-Copy
-Edit
 src="/var/www/html"
 dest="/backup/html_$(date +%F_%H-%M-%S).tar.gz"
 tar -czf "$dest" "$src"
 echo "Backup saved to $dest"
-Deploy code to multiple servers (SSH loop)
 
-bash
-Copy
-Edit
+
 for server in $(cat servers.txt); do
     echo "Deploying to $server"
     ssh user@$server "cd /app && git pull origin main && systemctl restart app"
 done
-Advanced Practice Scripts
-Monitor CPU and Memory Usage
 
-bash
-Copy
-Edit
 echo "CPU Load: $(uptime | awk '{print $(NF-2),$(NF-1),$NF}')"
 echo "Memory Usage:"
 free -h
-Check website health
 
-bash
-Copy
-Edit
 url="https://example.com"
 if curl -s --head "$url" | grep "200 OK" > /dev/null; then
     echo "$url is up"
 else
     echo "$url is down"
 fi
-Automated log cleanup
 
-bash
-Copy
-Edit
 find /var/log -type f -name "*.log" -mtime +7 -exec rm -f {} \;
 echo "Old logs deleted"
