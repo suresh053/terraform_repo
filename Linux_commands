@@ -57,3 +57,21 @@ history                 # Show command history
 clear                   # Clear terminal screen
 
 mkdir ~/practice && cd ~/practice
+
+--------------
+
+echo -e "1\n2\n3\n4\n5" > numbers.txt
+cat numbers.txt
+
+
+#!/bin/bash
+# Read numbers from file and print them
+
+for i in $(cat numbers.txt)
+do
+    echo "Number: $i"
+done
+
+nano loop_from_file.sh    # paste the script
+chmod +x loop_from_file.sh
+./loop_from_file.sh
