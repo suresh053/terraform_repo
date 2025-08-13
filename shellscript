@@ -1,68 +1,14 @@
-echo "Hello DevOps"
-
-server1
-server2
-server3
-
-while read server; do
-    echo "Processing $server"
-done < servers.txt
-
-Check disk usage (alert if > 80%)
-
-
-usage=$(df / | grep / | awk '{print $5}' | sed 's/%//')
-if [ "$usage" -gt 80 ]; then
-    echo "Warning: Disk usage is ${usage}%!"
-else
-    echo "Disk usage is under control."
-fi
-
-service="nginx"
-if systemctl is-active --quiet "$service"; then
-    echo "$service is running"
-else
-    echo "$service is NOT running"
-fi
-
-src="/var/www/html"
-dest="/backup/html_$(date +%F_%H-%M-%S).tar.gz"
-tar -czf "$dest" "$src"
-echo "Backup saved to $dest"
-
-
-for server in $(cat servers.txt); do
-    echo "Deploying to $server"
-    ssh user@$server "cd /app && git pull origin main && systemctl restart app"
-done
-
-echo "CPU Load: $(uptime | awk '{print $(NF-2),$(NF-1),$NF}')"
-echo "Memory Usage:"
-free -h
-
-url="https://example.com"
-if curl -s --head "$url" | grep "200 OK" > /dev/null; then
-    echo "$url is up"
-else
-    echo "$url is down"
-fi
-
-find /var/log -type f -name "*.log" -mtime +7 -exec rm -f {} \;
-echo "Old logs deleted"
-
------------
 #!/usr/bin/env bash
 set -euo pipefail
 
 src="/var/www/html"
 dest="/backup/html_$(date +%F_%H-%M-%S).tar.gz"
 
-# 1. Ensure /var/www/html exists
+# 1. Ensure $src exists
 if [ ! -d "$src" ]; then
     echo "📂 Creating $src..."
     sudo mkdir -p "$src"
-    # Give ownership to current user (optional)
-    sudo chown -R $USER:$USER "$src"
+    sudo chown -R $USER:$USER "$src"   # Optional
 fi
 
 # 2. Ensure /backup exists
@@ -71,13 +17,11 @@ if [ ! -d "$(dirname "$dest")" ]; then
     sudo mkdir -p "$(dirname "$dest")"
 fi
 
-# 3. Run the backup
+# 3. Create backup using src variable, avoid leading '/' in tar
 echo "📦 Creating backup..."
-if sudo tar -czf "$dest" "$src"; then
+if sudo tar -czf "$dest" -C "$(dirname "$src")" "$(basename "$src")"; then
     echo "✅ Backup saved to $dest"
 else
     echo "❌ Backup failed!"
     exit 1
 fi
-
-
