@@ -49,3 +49,35 @@ fi
 
 find /var/log -type f -name "*.log" -mtime +7 -exec rm -f {} \;
 echo "Old logs deleted"
+
+-----------
+#!/usr/bin/env bash
+set -euo pipefail
+
+src="/var/www/html"
+dest="/backup/html_$(date +%F_%H-%M-%S).tar.gz"
+
+# 1. Ensure /var/www/html exists
+if [ ! -d "$src" ]; then
+    echo "📂 Creating $src..."
+    sudo mkdir -p "$src"
+    # Give ownership to current user (optional)
+    sudo chown -R $USER:$USER "$src"
+fi
+
+# 2. Ensure /backup exists
+if [ ! -d "$(dirname "$dest")" ]; then
+    echo "📂 Creating $(dirname "$dest")..."
+    sudo mkdir -p "$(dirname "$dest")"
+fi
+
+# 3. Run the backup
+echo "📦 Creating backup..."
+if sudo tar -czf "$dest" "$src"; then
+    echo "✅ Backup saved to $dest"
+else
+    echo "❌ Backup failed!"
+    exit 1
+fi
+
+
